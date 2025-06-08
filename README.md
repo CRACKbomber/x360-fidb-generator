@@ -32,4 +32,4 @@ The output fidb will be located in .\fid_files
 
 # Give me the FIDBs
 
-A repository containing some FIDBs I have generated will be available soon.
+[Go Here](https://github.com/CRACKbomber/ghidra-fidb-xenonsdk)
