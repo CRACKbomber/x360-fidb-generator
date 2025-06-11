@@ -20,7 +20,7 @@ foreach ($SDKExe in $SDKExes) {
         $ProviderName = [System.IO.Path]::GetFileNameWithoutExtension($SDKExe.Name)
         $SDKVersion = $SDKExe.Name -replace "XDKSetupXenon", "" -replace "\.exe$", "" -replace "_", "." -replace "-", "."
         # Create temporary extraction directory
-        $TempDir = Join-Path $env:TEMP "XDKExtract_$(Get-Random)"
+        $TempDir = Join-Path $SDKPath "XDKExtract_$(Get-Random)"
         New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
 
         # Extract SDK exe to temp path
