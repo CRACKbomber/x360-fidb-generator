@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$SevenZipPath,
     [string]$SDKPath = "$PSScriptRoot\sdks",
-    [string]$LibPath = "$PSScriptRoot\libs",
+    [string]$LibPath = "$PSScriptRoot\libs"
 )
 
 function Extract-Pack([string]$FilePath, [string]$OutputPath) {
