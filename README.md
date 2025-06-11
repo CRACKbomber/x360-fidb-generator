@@ -23,10 +23,10 @@ Ghidra_Install\Extensions\IDAPro\Python\7xx\python --> IDA_Install\python
 
 1. Clone this repository to a drive with at least 16gb free space
 2. Put XDKSetupXenonXXXX.exe in sdks\
-3. Run ``` .\01-unpack-sdks.ps1 -SevenZipPath "[Path containing 7z.exe]" ```
-4. Run ``` .\02-convert-ida.ps1 -IDAPath "[Path containing ida.exe]" ```
-5. Run ``` .\03-import-ghidra.ps1 -GhidraPath "[Path containing ghidraRun.bat]" ```
-6. Run ``` .\04-generate-fidb.ps1 -GhidraPath "[Path containing ghidraRun.bat]" ```
+3. Run ``` .\01-unpack-sdks.ps1 -SevenZipPath "[Path to 7z.exe]" ```
+4. Run ``` .\02-convert-ida.ps1 -IDAPath "[Path to ida.exe]" ```
+5. Run ``` .\03-import-ghidra.ps1 -GhidraPath "[Root of Ghidra Install]" ```
+6. Run ``` .\04-generate-fidb.ps1 -GhidraPath "[Root of Ghidra Install]" ```
 
 The output fidb will be located in .\fid_files
 
