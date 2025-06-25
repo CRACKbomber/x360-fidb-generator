@@ -2,15 +2,19 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$SevenZipPath,
     [string]$SDKPath = "$PSScriptRoot\sdks",
-    [string]$LibPath = "$PSScriptRoot\libs"
+    [string]$LibPath = "$PSScriptRoot\libs",
+    [string]$LibraryProvider = "*"
 )
 
 function Extract-Pack([string]$FilePath, [string]$OutputPath) {
     return Start-Process -FilePath $SevenZipPath -ArgumentList("x `"$FilePath`"", "-o`"$OutputPath`"", "-y") -Wait -PassThru -NoNewWindow
 }
 
-# Get SDK exe files matching the pattern
-$SDKExes = Get-ChildItem -Path $SDKPath -Filter "*.exe" | Where-Object { $_.Name -match "XDKSetupXenon(.*)\.exe" }
+# Get SDK exe files matching the pattern and library provider pattern
+$ExecutablePattern = "XDKSetupXenon(.*)\.exe"
+$SDKExes = Get-ChildItem -Path $SDKPath -Filter "*.exe" | Where-Object { 
+                $_.Name -match $ExecutablePattern -and $_.Name -like $LibraryProvider 
+            }
 
 Write-Host "Found $($SDKExes.Count) SDK file(s)"
 
