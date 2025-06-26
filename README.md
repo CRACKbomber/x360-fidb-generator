@@ -10,6 +10,7 @@ These scripts will extract a given Xbox 360 setup exe, extract static libraries,
 - Ghidra 11+ (Tested with Ghidra 11.3.2)
 - 7zip
 - Powershell 7
+- Python 3.8+
 
 ## Configure IDA
 
