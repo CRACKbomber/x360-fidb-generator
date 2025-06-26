@@ -1,0 +1,3 @@
+[submodule "Xbox-360-Crypto"]
+	path = Xbox-360-Crypto
+	url = https://github.com/GoobyCorp/Xbox-360-Crypto

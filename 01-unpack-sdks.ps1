@@ -1,13 +1,40 @@
 param(
-    [Parameter(Mandatory=$true)]
     [string]$SevenZipPath,
+    [string]$Python3Path,
     [string]$SDKPath = "$PSScriptRoot\sdks",
     [string]$LibPath = "$PSScriptRoot\libs",
-    [string]$LibraryProvider = "*"
+    [string]$LibraryProvider = "*",
+    [string]$GoobyPyPath = "$PSScriptRoot\Xbox-360-Crypto"
 )
 
+function Extract-Lib([string]$FilePath, [string]$OutputPath) {
+    return Start-Process -FilePath 7z -ArgumentList("x `"$FilePath`"", "-o`"$OutputPath`"", "-y") -Wait -PassThru -NoNewWindow
+}
+
 function Extract-Pack([string]$FilePath, [string]$OutputPath) {
-    return Start-Process -FilePath $SevenZipPath -ArgumentList("x `"$FilePath`"", "-o`"$OutputPath`"", "-y") -Wait -PassThru -NoNewWindow
+    $ExtractScript = Join-Path $GoobyPyPath "xdk_extract.py"
+    # xdk setup --> data_X.cab
+    Start-Process -FilePath py -ArgumentList ("`"$ExtractScript`"", "$FilePath", "`"$OutputPath`"") -Wait -PassThru -NoNewWindow
+    # data_X.cab --> exploded cab. en-US is always low index so other locales are discarded (oh well)
+    Resolve-Path (Join-Path $OutputPath "*.cab") | ForEach-Object {
+        Start-Process -FilePath 7z -ArgumentList("x `"$_`"", "-o`"$OutputPath`"", "-y") -Wait -PassThru -NoNewWindow
+    }
+}
+
+$env:Path += ";$SevenZipPath"
+
+if($Python3Path) {
+    $env:Path += ";$Python3Path"
+}
+
+if(-not(Get-Command py -ErrorAction SilentlyContinue)) {
+    Write-Error "'py' was not found. Python 3.8+ required"
+    return -1
+}
+
+if(-not(Get-Command 7z -ErrorAction SilentlyContinue)) {
+        Write-Error "'7z' was not found. 7-Zip required"
+    return -1
 }
 
 # Get SDK exe files matching the pattern and library provider pattern
@@ -37,7 +64,7 @@ foreach ($SDKExe in $SDKExes) {
             $LibFileName = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
             $ObjDestPath = "$LibPath\$ProviderName\$LibFileName\$SDKVersion\ppc64"
             $LibDestPath = "$ObjDestPath\lib"
-            $LibExtractResult = Extract-Pack -FilePath $_ -OutputPath $LibDestPath
+            $LibExtractResult = Extract-Lib -FilePath $_ -OutputPath $LibDestPath
             if ($LibExtractResult.ExitCode -ne 0) {
                 Write-Error "Failed to extract library '$($_.Name)' from '$LibSourcePath'. Exit code: $($LibExtractResult.ExitCode)"
                 continue
